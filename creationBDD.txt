@@ -1,0 +1,3 @@
+CREATE DATABASE messages;
+USE messages;
+CREATE TABLE boiteenvoi (id INT AUTO_INCREMENT NON NULL PRIMARY KEY, envoyeur VARCHAR (60), receveur VARCHAR (60), texte VARCHAR (500));
