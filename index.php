@@ -68,21 +68,21 @@ function base()
 			die('Erreur : ' . $e->getMessage());
 	}
 	if (isset($_GET["id"])){
-		$bdd->query("DELETE FROM BoiteEnvoi WHERE id=".$_GET["id"]."");
+		$bdd->query("DELETE FROM boiteenvoi WHERE id=".$_GET["id"]."");
 	}
 	
 	if (isset($_POST["texte"])&&isset($_POST["receveur"])&&isset($_POST["envoyeur"])){
         $message = $_POST['texte'];
         $mail = $_POST['receveur'];
         $envoi = $_POST['envoyeur'];
-		$bdd->query("INSERT INTO BoiteEnvoi (envoyeur,receveur,texte) VALUES ('".$envoi."','".$mail."','".$message."')");
+		$bdd->query("INSERT INTO boiteenvoi (envoyeur,receveur,texte) VALUES ('".$envoi."','".$mail."','".$message."')");
 	}
 	
-	$reponse = $bdd->query("SELECT * FROM BoiteEnvoi WHERE receveur='".$mail."'");
+	$reponse = $bdd->query("SELECT * FROM boiteenvoi WHERE receveur='".$mail."'");
 	
 	while ($donnees = $reponse->fetch())
 	{
-		echo "<li><a id=\"croix\" href=\"index.php?id=".$donnees['id']."\">x</a> ".$donnees['receveur']."<br> ".$donnees['texte']."</br></li><br/>";
+		echo "<li><a id=\"croix\" href=\"index.php?id=".$donnees['id']."\">x</a> 'Message envoyé à: '".$donnees['receveur']."<br> ".$donnees['texte']."</br></li><br/>";
 	}
 }
 
@@ -93,8 +93,8 @@ function reception()
     $dbuser = "root";
     $dbpass = "rtlry";
     $db = "messages";
-    $envoi="";
-
+    $envoi = $_POST['envoyeur'];
+    $envoi = "";
     try
     {
         $bdd = new PDO('mysql:host=localhost;dbname='.$db.';charset=utf8', $dbuser, $dbpass);
@@ -104,11 +104,11 @@ function reception()
        die('Erreur : ' . $e->getMessage());
     }
 
-	$reponse = $bdd->query("SELECT * FROM BoiteEnvoi WHERE receveur='".$envoi."'");
+	$reponse = $bdd->query("SELECT * FROM boiteenvoi WHERE receveur='".$envoi."'");
 	
 	while ($donnees = $reponse->fetch())
 	{
-		echo "<li><a id=\"croix\" href=\"index.php?id=".$donnees['id']."\">x</a> ".$donnees['envoyeur']."<br> ".$donnees['texte']."</br></li><br/>";
+		echo "<li><a id=\"croix\" href=\"index.php?id=".$donnees['id']."\">x</a> 'Message recu de: '".$donnees['envoyeur']."<br> ".$donnees['texte']."</br></li><br/>";
 	}
 }
 ?>
